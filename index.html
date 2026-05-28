@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compliance Compiler Network | AI-Powered Regulatory Compliance Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+:root{
+  --blue:#0B2D5E;--blue-light:#1A4A8A;--blue-dim:#0A2550;--blue-dark:#071D3E;--blue-deeper:#040F20;
+  --accent:#00C4B4;--accent-light:#B2F0EC;--accent-dim:#00A899;
+  --nav-bg:#0B2D5E;--footer-bg:#040F20;
+  --bg-white:#F4F8FF;--bg-light:#EAF1FF;--bg-section:#D8E8FF;--bg-card:#FFFFFF;
+  --card-border:rgba(11,45,94,0.18);--card-border-strong:rgba(11,45,94,0.38);
+  --text-dark:#071D3E;--text-mid:#1A3A6A;--text-muted:#4A6A9A;--text-light:#8AABCF;--white:#FFFFFF;
+  --gold:#C4932A;--gold-light:#F2DFA0;
+  --nav-h:72px;--max-w:1200px;
+  --font:'Plus Jakarta Sans',sans-serif;--display:'Sora',sans-serif;--mono:'IBM Plex Mono',monospace;
+  --ease:cubic-bezier(0.4,0,0.2,1);--ease-out:cubic-bezier(0,0,0.2,1);
+}
+body{font-family:var(--font);color:var(--text-dark);background:var(--bg-white);overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg-light);}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px;}
+img{display:block;max-width:100%;}
+
+/* NAV */
+.navbar{position:fixed;top:0;left:0;width:100%;height:var(--nav-h);background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.12);z-index:1000;display:flex;align-items:center;padding:0 clamp(16px,5vw,60px);justify-content:space-between;box-shadow:0 2px 24px rgba(4,15,32,0.4);}
+.nav-logo{font-family:var(--display);font-size:15px;font-weight:800;color:var(--white);letter-spacing:-0.3px;display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none;flex-shrink:0;}
+.nav-logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),var(--blue-light));border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(0,196,180,0.3);border:1px solid rgba(255,255,255,0.2);}
+.nav-logo-icon svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.1;}
+.nav-logo-text span{font-size:9px;font-family:var(--mono);font-weight:500;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none;}
+.nav-links li button{background:none;border:none;color:rgba(255,255,255,0.82);font-size:10px;font-weight:600;padding:7px 11px;border-radius:7px;transition:all 0.22s var(--ease);cursor:pointer;font-family:var(--mono);letter-spacing:0.8px;text-transform:uppercase;position:relative;white-space:nowrap;}
+.nav-links li button:hover{color:#fff;background:rgba(255,255,255,0.12);}
+.nav-links li button.active{color:#fff;background:rgba(0,196,180,0.18);}
+.nav-links li button.active::after{content:'';position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:14px;height:2px;background:var(--accent);border-radius:2px;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.btn-demo-nav{background:linear-gradient(135deg,var(--accent),var(--accent-dim));color:var(--blue-dark);border:none;padding:9px 18px;border-radius:8px;font-size:10px;font-weight:700;cursor:pointer;transition:all 0.22s;font-family:var(--mono);letter-spacing:0.8px;text-transform:uppercase;white-space:nowrap;box-shadow:0 2px 10px rgba(0,196,180,0.3);}
+.btn-demo-nav:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,196,180,0.5);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:none;border:none;flex-shrink:0;}
+.hamburger span{width:22px;height:2px;background:#fff;border-radius:2px;transition:0.3s;display:block;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-nav{display:none;position:fixed;top:var(--nav-h);left:0;width:100%;background:var(--blue-dark);backdrop-filter:blur(20px);padding:12px 20px 20px;flex-direction:column;gap:2px;z-index:999;border-bottom:1px solid rgba(255,255,255,0.1);animation:slideDown 0.25s var(--ease-out);}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+.mobile-nav.open{display:flex;}
+.mobile-nav button{background:none;border:none;color:rgba(255,255,255,0.8);font-size:13px;font-weight:600;padding:13px 12px;border-bottom:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:var(--mono);text-align:left;text-transform:uppercase;letter-spacing:1px;transition:color 0.2s,background 0.2s;border-radius:6px;}
+.mobile-nav button:hover{color:#fff;background:rgba(255,255,255,0.1);}
+.mobile-nav .mob-cta{margin-top:8px;background:linear-gradient(135deg,var(--accent),var(--accent-dim));color:var(--blue-dark);border:none;padding:13px;border-radius:8px;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:var(--mono);}
+
+/* PAGE SYSTEM */
+.page{display:none;min-height:100vh;padding-top:var(--nav-h);}
+.page.active{display:block;animation:pgIn 0.35s var(--ease);}
+@keyframes pgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* COMMONS */
+.label-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--blue-dim);margin-bottom:14px;}
+.label-tag::before{content:'';width:20px;height:1px;background:var(--accent);}
+.label-tag-white{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.8);margin-bottom:14px;}
+.label-tag-white::before{content:'';width:20px;height:1px;background:var(--accent);}
+.section-h2{font-family:var(--display);font-size:clamp(28px,3.5vw,52px);font-weight:800;line-height:1.1;letter-spacing:-0.8px;margin-bottom:10px;}
+.section-h2.dark{color:var(--text-dark);}
+.section-h2.white{color:var(--white);}
+.section-divider{width:56px;height:3px;margin:16px 0 28px;border-radius:2px;}
+.divider-accent{background:linear-gradient(90deg,var(--accent),transparent);}
+.divider-blue{background:linear-gradient(90deg,var(--blue),transparent);}
+.divider-white{background:linear-gradient(90deg,rgba(255,255,255,0.8),transparent);}
+.para-dark{color:var(--text-mid);line-height:1.85;font-size:17px;}
+.para-light{color:rgba(255,255,255,0.85);line-height:1.85;font-size:17px;}
+.container{max-width:var(--max-w);margin:0 auto;padding:0 clamp(16px,4vw,60px);}
+
+/* BUTTONS */
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:var(--white);padding:13px 28px;border-radius:8px;font-weight:700;font-size:12px;letter-spacing:0.8px;text-transform:uppercase;transition:all 0.25s;font-family:var(--mono);border:none;cursor:pointer;box-shadow:0 4px 16px rgba(11,45,94,0.35);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(11,45,94,0.5);}
+.btn-accent{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--accent),var(--accent-dim));color:var(--blue-dark);padding:13px 28px;border-radius:8px;font-weight:700;font-size:12px;letter-spacing:0.8px;text-transform:uppercase;transition:all 0.25s;font-family:var(--mono);border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,196,180,0.35);}
+.btn-accent:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,196,180,0.55);}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--blue);color:var(--blue-dark);padding:12px 28px;border-radius:8px;font-weight:700;font-size:12px;letter-spacing:0.8px;text-transform:uppercase;transition:all 0.25s;font-family:var(--mono);background:none;cursor:pointer;}
+.btn-secondary:hover{background:rgba(11,45,94,0.08);}
+.btn-white{display:inline-flex;align-items:center;gap:8px;background:var(--white);color:var(--blue-dark);padding:12px 28px;border-radius:8px;font-weight:700;font-size:12px;letter-spacing:0.8px;text-transform:uppercase;transition:all 0.25s;font-family:var(--mono);border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.12);}
+.btn-white:hover{transform:translateY(-2px);background:var(--accent-light);}
+
+/* BADGES */
+.risk-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--mono);letter-spacing:0.5px;}
+.risk-blue{background:rgba(11,45,94,0.1);color:var(--blue-dim);border:1px solid rgba(11,45,94,0.28);}
+.risk-accent{background:rgba(0,196,180,0.12);color:#005E55;border:1px solid rgba(0,196,180,0.3);}
+.risk-green{background:rgba(16,185,129,0.1);color:#059669;border:1px solid rgba(16,185,129,0.25);}
+.risk-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+
+/* HERO */
+.hero{background:linear-gradient(140deg,#EAF1FF 0%,#D8E8FF 40%,#C0D4FF 100%);padding:clamp(60px,10vw,100px) 0 clamp(50px,8vw,80px);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,196,180,0.15) 0%,transparent 70%);}
+.hero::after{content:'';position:absolute;bottom:-100px;left:-50px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(11,45,94,0.1) 0%,transparent 70%);}
+.hero-inner{max-width:var(--max-w);margin:0 auto;padding:0 clamp(16px,4vw,60px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:center;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(11,45,94,0.1);border:1px solid rgba(11,45,94,0.22);border-radius:30px;padding:6px 16px;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--blue-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:22px;}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+h1{font-family:var(--display);font-size:clamp(34px,5vw,64px);font-weight:800;line-height:1.06;letter-spacing:-1.5px;color:var(--text-dark);margin-bottom:6px;}
+h1 .accent{color:var(--accent);}
+h1 .blue{color:var(--blue);}
+.hero-rule{width:48px;height:3px;background:linear-gradient(90deg,var(--accent),var(--blue-light));border-radius:2px;margin:20px 0;}
+.hero-body{font-size:17px;color:var(--text-mid);line-height:1.8;margin-bottom:28px;max-width:540px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.hero-mini-stats{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;}
+.hero-mini-card{background:rgba(255,255,255,0.88);border:1px solid rgba(11,45,94,0.14);border-radius:12px;padding:14px 18px;min-width:135px;backdrop-filter:blur(8px);}
+.hero-mini-card strong{display:block;font-family:var(--display);font-size:22px;font-weight:800;color:var(--blue-dark);}
+.hero-mini-card span{font-size:11px;color:var(--text-muted);font-family:var(--mono);}
+
+/* DASHBOARD CARD */
+.score-card{background:#fff;border-radius:18px;border:1px solid rgba(11,45,94,0.12);padding:24px;box-shadow:0 8px 40px rgba(11,45,94,0.1);}
+.score-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;}
+.score-card-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;}
+.dashboard-title{font-family:var(--display);font-size:17px;font-weight:700;color:var(--text-dark);}
+.live-dot-wrap{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;font-weight:700;color:var(--accent);letter-spacing:1.5px;}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 1.5s infinite;}
+.score-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(11,45,94,0.06);}
+.score-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.score-icon.blue-bg{background:rgba(11,45,94,0.1);color:var(--blue-dim);}
+.score-icon.accent-bg{background:rgba(0,196,180,0.12);color:var(--accent-dim);}
+.score-icon.green-bg{background:rgba(16,185,129,0.1);color:#059669;}
+.score-lbl{flex:1;font-size:12px;color:var(--text-muted);}
+.score-val{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text-dark);}
+.score-big{display:flex;align-items:center;gap:16px;margin-top:18px;padding:16px;background:linear-gradient(135deg,rgba(11,45,94,0.06),rgba(0,196,180,0.1));border-radius:12px;border:1px solid rgba(0,196,180,0.2);}
+.score-big-num{font-family:var(--display);font-size:48px;font-weight:800;color:var(--accent);line-height:1;}
+.score-big-info .label{font-size:13px;font-weight:700;color:var(--text-dark);}
+.score-big-info .sub{font-size:11px;color:var(--text-muted);margin-top:3px;font-family:var(--mono);}
+
+/* STATS STRIP */
+.section-blue{background:linear-gradient(135deg,var(--blue-dark) 0%,var(--blue-deeper) 100%);padding:clamp(60px,8vw,96px) 0;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px;}
+.stat-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:clamp(20px,3vw,30px);text-align:center;transition:transform 0.25s,border-color 0.25s;}
+.stat-card:hover{transform:translateY(-4px);border-color:rgba(0,196,180,0.4);}
+.stat-num{font-family:var(--display);font-size:clamp(32px,4vw,48px);font-weight:800;color:var(--accent);margin-bottom:10px;}
+.stat-lbl{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.6;}
+
+/* PLATFORM */
+.platform-section{background:var(--bg-white);padding:clamp(60px,8vw,96px) 0;}
+.platform-sub{max-width:760px;margin-bottom:44px;color:var(--text-mid);}
+.platform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+.platform-card{background:#fff;border:1px solid rgba(11,45,94,0.1);border-radius:18px;overflow:hidden;transition:border-color 0.3s,box-shadow 0.3s,transform 0.3s;box-shadow:0 2px 12px rgba(11,45,94,0.06);}
+.platform-card:hover{border-color:var(--accent);box-shadow:0 8px 32px rgba(0,196,180,0.15);transform:translateY(-4px);}
+.platform-img-wrap{height:200px;overflow:hidden;}
+.platform-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
+.platform-card:hover .platform-img-wrap img{transform:scale(1.05);}
+.platform-card .inner{padding:20px 22px 22px;}
+.element-badge{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);background:rgba(0,196,180,0.1);border:1px solid rgba(0,196,180,0.25);border-radius:4px;padding:4px 10px;margin-bottom:12px;}
+.platform-card h3{font-family:var(--display);font-size:18px;font-weight:700;color:var(--text-dark);margin-bottom:10px;line-height:1.3;}
+.platform-card p{font-size:14px;color:var(--text-muted);line-height:1.7;}
+.more-text{font-size:13px;color:var(--text-muted);line-height:1.7;margin-top:12px;display:none;}
+.platform-card.open .more-text{display:block;}
+.expand-btn{margin-top:16px;background:none;border:1px solid rgba(11,45,94,0.2);color:var(--blue);font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 16px;border-radius:6px;cursor:pointer;transition:all 0.2s;}
+.expand-btn:hover{background:var(--blue);color:#fff;}
+
+/* WHY / SECTIONS */
+.why-section{background:var(--bg-light);padding:clamp(60px,8vw,96px) 0;}
+.section-light{background:var(--bg-white);padding:clamp(60px,8vw,96px) 0;}
+.section-alt{background:var(--bg-light);padding:clamp(60px,8vw,96px) 0;}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px;}
+.why-card{background:#fff;border:1px solid rgba(11,45,94,0.1);border-radius:16px;padding:28px;transition:border-color 0.3s,box-shadow 0.3s,transform 0.3s;}
+.why-card:hover{border-color:var(--accent);box-shadow:0 6px 24px rgba(0,196,180,0.12);transform:translateY(-3px);}
+.why-icon{width:48px;height:48px;background:linear-gradient(135deg,rgba(11,45,94,0.08),rgba(0,196,180,0.12));border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:20px;color:var(--blue);}
+.why-card h4{font-family:var(--display);font-size:16px;font-weight:700;color:var(--text-dark);margin-bottom:10px;}
+.why-card p{font-size:13px;color:var(--text-muted);line-height:1.75;}
+
+/* ABOUT / FOUNDERS */
+.about-hero{background:linear-gradient(140deg,#EAF1FF 0%,#D8E8FF 50%,#C0D4FF 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);}
+.founders-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:40px;}
+.founder-card{background:#fff;border:1px solid rgba(11,45,94,0.12);border-radius:18px;padding:32px;}
+.founder-img{width:80px;height:80px;border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--accent));display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:24px;font-weight:800;color:#fff;margin-bottom:20px;}
+.founder-card h3{font-family:var(--display);font-size:24px;font-weight:800;color:var(--text-dark);margin-bottom:6px;}
+.founder-card .role{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:18px;}
+.founder-card p{font-size:14px;color:var(--text-muted);line-height:1.8;}
+.founder-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+.f-badge{font-family:var(--mono);font-size:10px;background:rgba(11,45,94,0.07);border:1px solid rgba(11,45,94,0.18);color:var(--blue-dim);padding:5px 12px;border-radius:6px;}
+.contact-detail{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid rgba(11,45,94,0.08);}
+.contact-detail .icon{width:38px;height:38px;background:linear-gradient(135deg,rgba(11,45,94,0.1),rgba(0,196,180,0.1));border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:14px;flex-shrink:0;}
+.contact-detail .text strong{display:block;font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:3px;}
+.contact-detail .text span{font-size:12px;color:var(--text-muted);}
+
+/* PROCESS STEPS */
+.process-step{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);align-items:center;margin-bottom:80px;padding-bottom:80px;border-bottom:1px solid rgba(11,45,94,0.07);}
+.process-step:last-child{border-bottom:none;}
+.process-step:nth-child(even){direction:rtl;}
+.process-step:nth-child(even)>*{direction:ltr;}
+.step-num{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+.step-h3{font-family:var(--display);font-size:clamp(22px,3vw,32px);font-weight:800;color:var(--text-dark);line-height:1.2;margin-bottom:18px;}
+.step-p{font-size:15px;color:var(--text-muted);line-height:1.8;margin-bottom:14px;}
+.step-vis{border-radius:18px;overflow:hidden;border:1px solid rgba(11,45,94,0.1);box-shadow:0 8px 32px rgba(11,45,94,0.08);background:linear-gradient(135deg,#EAF1FF,#D8E8FF);}
+.step-vis-inner{padding:28px;min-height:280px;display:flex;flex-direction:column;justify-content:space-between;}
+.step-vis-title{font-family:var(--display);font-size:17px;font-weight:700;color:var(--blue);margin-bottom:16px;}
+.step-vis-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,0.85);border-radius:10px;margin-bottom:10px;border:1px solid rgba(11,45,94,0.07);}
+.step-vis-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.step-vis-text{font-size:13px;color:var(--text-mid);}
+.step-vis-bar{display:flex;align-items:center;gap:10px;margin-top:4px;}
+.step-vis-bar-fill{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--blue-light));}
+.step-vis-bar-lbl{font-family:var(--mono);font-size:10px;color:var(--text-muted);}
+/* Process image panel */
+.step-vis-img{width:100%;height:260px;object-fit:cover;display:block;border-radius:18px;border:1px solid rgba(11,45,94,0.1);box-shadow:0 8px 32px rgba(11,45,94,0.1);}
+.step-vis-img-wrap{border-radius:18px;overflow:hidden;box-shadow:0 8px 32px rgba(11,45,94,0.1);border:1px solid rgba(11,45,94,0.1);}
+.step-vis-img-wrap img{width:100%;height:260px;object-fit:cover;display:block;transition:transform 0.4s;}
+.step-vis-img-wrap:hover img{transform:scale(1.04);}
+
+/* PRICING */
+.pricing-section{background:var(--bg-light);padding:clamp(60px,8vw,96px) 0;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:44px;}
+.pricing-card{background:#fff;border:2px solid rgba(11,45,94,0.1);border-radius:20px;padding:32px;transition:all 0.3s;position:relative;overflow:hidden;}
+.pricing-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:4px;background:linear-gradient(90deg,var(--blue),var(--accent));}
+.pricing-card.featured{border-color:var(--accent);box-shadow:0 12px 48px rgba(0,196,180,0.2);}
+.pricing-card.featured::before{background:linear-gradient(90deg,var(--accent),var(--blue));}
+.pricing-card:hover{transform:translateY(-4px);}
+.pricing-featured-badge{position:absolute;top:20px;right:20px;background:linear-gradient(135deg,var(--accent),var(--accent-dim));color:var(--blue-dark);font-family:var(--mono);font-size:9px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;}
+.pricing-tier{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;}
+.pricing-price{font-family:var(--display);font-size:44px;font-weight:800;color:var(--blue-dark);line-height:1;}
+.pricing-price sup{font-size:22px;font-weight:700;vertical-align:top;margin-top:10px;display:inline-block;}
+.pricing-price span{font-size:14px;color:var(--text-muted);font-family:var(--font);font-weight:400;}
+.pricing-desc{font-size:13px;color:var(--text-muted);margin:14px 0 22px;line-height:1.7;}
+.pricing-divider{height:1px;background:rgba(11,45,94,0.08);margin:22px 0;}
+.pricing-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.pricing-features li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-mid);}
+.pricing-features li i{color:var(--accent);margin-top:2px;flex-shrink:0;}
+
+/* FAQ */
+.faq-section{background:var(--bg-white);padding:clamp(60px,8vw,96px) 0;}
+.faq-grid{max-width:800px;margin:40px auto 0;display:flex;flex-direction:column;gap:12px;}
+.faq-item{background:#fff;border:1px solid rgba(11,45,94,0.1);border-radius:12px;overflow:hidden;}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;cursor:pointer;transition:background 0.2s;}
+.faq-q:hover{background:rgba(11,45,94,0.03);}
+.faq-q span{font-size:15px;font-weight:700;color:var(--text-dark);}
+.faq-q i{color:var(--accent);transition:transform 0.3s;flex-shrink:0;}
+.faq-item.open .faq-q i{transform:rotate(180deg);}
+.faq-a{display:none;padding:0 24px 20px;font-size:14px;color:var(--text-muted);line-height:1.8;}
+.faq-item.open .faq-a{display:block;}
+
+/* CHARTS */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;}
+.chart-card{background:#fff;border:1px solid rgba(11,45,94,0.1);border-radius:16px;padding:24px;}
+.chart-card h4{font-family:var(--display);font-size:16px;font-weight:700;color:var(--text-dark);margin-bottom:6px;}
+.chart-card p{font-size:12px;color:var(--text-muted);margin-bottom:18px;}
+.chart-wrap{height:220px;position:relative;}
+
+/* CONTACT */
+.contact-section{background:var(--bg-light);padding:clamp(60px,8vw,96px) 0;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:40px;}
+.contact-form-card{background:#fff;border:1px solid rgba(11,45,94,0.12);border-radius:20px;padding:36px;}
+.form-group{margin-bottom:20px;}
+.form-group label{display:block;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--bg-light);border:1px solid rgba(11,45,94,0.15);border-radius:10px;padding:12px 16px;font-family:var(--font);font-size:14px;color:var(--text-dark);transition:border-color 0.2s,box-shadow 0.2s;outline:none;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,196,180,0.1);}
+.form-group textarea{min-height:120px;resize:vertical;}
+
+/* FOOTER */
+footer{background:var(--footer-bg);color:rgba(255,255,255,0.75);padding:clamp(48px,7vw,80px) 0 0;}
+.footer-inner{max-width:var(--max-w);margin:0 auto;padding:0 clamp(16px,4vw,60px);display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:56px;}
+.footer-brand p{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.75;margin-top:16px;max-width:240px;}
+.footer-logo{font-family:var(--display);font-size:16px;font-weight:800;color:#fff;display:flex;align-items:center;gap:10px;}
+.footer-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--blue-light));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;}
+.footer-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+.footer-badge{font-family:var(--mono);font-size:9px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);padding:5px 10px;border-radius:6px;letter-spacing:0.5px;}
+.footer-col-title{font-family:var(--mono);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:18px;font-weight:700;}
+.footer-col{display:flex;flex-direction:column;gap:10px;}
+.footer-col a{font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;transition:color 0.2s;cursor:pointer;}
+.footer-col a:hover{color:var(--accent);}
+.footer-bottom-bar{border-top:1px solid rgba(255,255,255,0.08);padding:20px clamp(16px,4vw,60px);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-bottom-bar p{font-size:12px;color:rgba(255,255,255,0.45);}
+.footer-bottom-bar span{color:var(--accent);}
+.footer-bottom-links{display:flex;gap:20px;}
+.footer-bottom-links a{font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none;cursor:pointer;transition:color 0.2s;}
+.footer-bottom-links a:hover{color:var(--accent);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .platform-grid{grid-template-columns:1fr!important;}
+  .why-grid{grid-template-columns:1fr 1fr;}
+  .founders-grid{grid-template-columns:1fr;}
+  .process-step{grid-template-columns:1fr!important;direction:ltr!important;}
+  .pricing-grid{grid-template-columns:1fr;}
+  .charts-grid{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr 1fr;}
+  .nav-links{display:none;}
+  .btn-demo-nav{display:none;}
+  .hamburger{display:flex;}
+  /* Vision & Mission 2-col → 1-col */
+  .vision-grid{grid-template-columns:1fr!important;}
+  /* Add-On Services 3-col → 1-col */
+  .addon-grid{grid-template-columns:1fr!important;}
+  /* Buttons wrap nicely */
+  .hero-btns{flex-direction:column;align-items:flex-start;}
+  .hero-btns button,.hero-btns a{width:100%;justify-content:center;text-align:center;}
+  /* Process step image full width */
+  .step-vis-img{height:200px!important;}
+}
+@media(max-width:600px){
+  .why-grid{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr;}
+  .footer-bottom-bar{flex-direction:column;text-align:center;}
+  .hero-mini-stats{gap:10px;}
+  .hero-mini-stats{flex-direction:column;}
+  .hero-mini-card{width:100%;}
+  /* All full-width buttons stack */
+  .btn-primary,.btn-accent,.btn-secondary,.btn-white{width:100%;justify-content:center;}
+  /* Pricing addon cards single col */
+  .addon-grid{grid-template-columns:1fr!important;}
+  .vision-grid{grid-template-columns:1fr!important;}
+  .step-vis-img{height:160px!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="nav-logo" onclick="showPage('home')">
+    <div class="nav-logo-text">
+      Compliance Compiler Network
+      <span>RegOps Platform</span>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><button id="nav-home" class="active" onclick="showPage('home')">Home</button></li>
+    <li><button id="nav-about" onclick="showPage('about')">About</button></li>
+    <li><button id="nav-platform" onclick="showPage('platform')">Platform</button></li>
+    <li><button id="nav-process" onclick="showPage('process')">How It Works</button></li>
+    <li><button id="nav-market" onclick="showPage('market')">Market</button></li>
+    <li><button id="nav-pricing" onclick="showPage('pricing')">Pricing</button></li>
+    <li><button id="nav-faq" onclick="showPage('faq')">FAQ</button></li>
+    <li><button id="nav-contact" onclick="showPage('contact')">Contact</button></li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="btn-demo-nav" onclick="showPage('contact')">Request Demo →</button>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <button onclick="showPage('home');closeMobile()">Home</button>
+  <button onclick="showPage('about');closeMobile()">About</button>
+  <button onclick="showPage('platform');closeMobile()">Platform</button>
+  <button onclick="showPage('process');closeMobile()">How It Works</button>
+  <button onclick="showPage('market');closeMobile()">Market</button>
+  <button onclick="showPage('pricing');closeMobile()">Pricing</button>
+  <button onclick="showPage('faq');closeMobile()">FAQ</button>
+  <button onclick="showPage('contact');closeMobile()">Contact</button>
+  <button class="mob-cta" onclick="showPage('contact');closeMobile()">Request Demo →</button>
+</div>
+<!-- PAGE HOME -->
+<div class="page active" id="page-home">
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span class="hero-badge-dot"></span>AI-Powered · RegTech · UK Fintech · 2026</div>
+      <h1>Read Law.<br><span class="accent">Execute Code.</span><br>Compile Trust.</h1>
+      <div class="hero-rule"></div>
+      <p class="hero-body">Compliance Compiler Network is the UK's first AI-driven regulatory compilation platform  transforming dense legal text into machine-executable compliance logic and eliminating the Interpretation Gap that costs UK businesses billions in non-compliance fines.</p>
+      <div class="hero-btns">
+        <button class="btn-accent" onclick="showPage('contact')">Request Demo →</button>
+        <button class="btn-secondary" onclick="showPage('platform')">Explore Platform</button>
+      </div>
+    
+    </div>
+    <div>
+      <div class="score-card">
+        <div class="score-card-top">
+          <div><div class="score-card-label">Compliance Command Center</div><div class="dashboard-title">Source-to-Logic Monitor</div></div>
+          <div class="live-dot-wrap"><span class="live-dot"></span>LIVE</div>
+        </div>
+        <div class="score-row"><div class="score-icon blue-bg"><i class="fas fa-file-code"></i></div><div class="score-lbl">Regulations Monitored</div><span class="risk-badge risk-blue">256 <span class="risk-dot"></span></span><div class="score-val">+12 new</div></div>
+        <div class="score-row"><div class="score-icon accent-bg"><i class="fas fa-network-wired"></i></div><div class="score-lbl">Controls Mapped (IR)</div><span class="risk-badge risk-accent">1,842 <span class="risk-dot"></span></span><div class="score-val">+9%</div></div>
+        <div class="score-row"><div class="score-icon green-bg"><i class="fas fa-check-circle"></i></div><div class="score-lbl">ISO 27001 Score</div><span class="risk-badge risk-green">96% <span class="risk-dot"></span></span><div class="score-val">Optimal</div></div>
+        <div class="score-row"><div class="score-icon blue-bg"><i class="fas fa-shield-alt"></i></div><div class="score-lbl">SOC 2 Coverage</div><span class="risk-badge risk-blue">93% <span class="risk-dot"></span></span><div class="score-val">Strong</div></div>
+        <div class="score-row"><div class="score-icon accent-bg"><i class="fas fa-balance-scale"></i></div><div class="score-lbl">GDPR Alignment</div><span class="risk-badge risk-accent">91% <span class="risk-dot"></span></span><div class="score-val">Active</div></div>
+        <div class="score-big"><div class="score-big-num">92%</div><div class="score-big-info"><div class="label">Overall Compliance Score</div><div class="sub">+18% vs last month · Audit-Ready</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-blue">
+  <div class="container">
+    <div class="label-tag-white">Why the Market Needs Us Now</div>
+    <h2 class="section-h2 white">The Interpretation Gap Crisis</h2>
+    <div class="section-divider divider-white"></div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">$14B</div><div class="stat-lbl">Global non-compliance fines in 2024  the market Compliance Compiler Network was built to protect against</div></div>
+      <div class="stat-card"><div class="stat-num">68%</div><div class="stat-lbl">Of UK businesses still rely on manual spreadsheets to map legal obligations to technical controls</div></div>
+      <div class="stat-card"><div class="stat-num">70%</div><div class="stat-lbl">Reduction in manual remediation time via our Jurisdiction-Aware Delta Compilation engine</div></div>
+      <div class="stat-card"><div class="stat-num">£50B</div><div class="stat-lbl">Revenue risk facing UK SMEs globally due to compliance failures and missing structured logic cloning</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="platform-section">
+  <div class="container">
+    <div class="label-tag">Core Intelligence Modules</div>
+    <h2 class="section-h2 dark">Six Modules. One Complete RegOps Compiler.</h2>
+    <div class="section-divider divider-accent"></div>
+    <p class="para-dark platform-sub">Compliance Compiler Network combines Regulatory Intelligence, Control Mapping, Delta Diagnostics, Outcome Learning, Federated Benchmarking, and Audit Governance into one unified SaaS platform  code-readable, real-time, always audit-ready.</p>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <div class="platform-img-wrap"><img src="comp1.jpg" alt="Regulatory Intelligence"></div>
+        <div class="inner"><div class="element-badge">Module 01</div><h3>Regulation Intelligence Engine</h3><p>AI-driven ingestion and parsing of UK-GDPR, OSA, DORA, NIS2, PCI DSS, ISO 27001 into structured Compliance Intermediate Representation (IR) objects.</p><div class="more-text">The Source-to-Logic engine analyses 500+ pages of UK regulatory documentation to identify linguistic anchors  Actors, Obligations, and Evidence Thresholds  and converts them into machine-readable compliance graphs that your technical team can execute on.</div><button class="expand-btn" onclick="toggleCard(this)">Learn More</button></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-img-wrap"><img src="comp2.jpg" alt="Control Mapping"></div>
+        <div class="inner"><div class="element-badge">Module 02</div><h3>Clause-to-Control Auto-Synthesis</h3><p>Automatically deconstructs a single legal paragraph into a complex multi-step technical workflow, removing the need for manual legal-to-IT translation entirely.</p><div class="more-text">Our Compliance DNA Fingerprinting uses machine learning to identify patterns of successful compliance interactions, enabling benchmarking and cloning of expert-level regulatory logic with 92% Quiet Failure detection accuracy.</div><button class="expand-btn" onclick="toggleCard(this)">Learn More</button></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-img-wrap"><img src="comp3.jpg" alt="Delta Diagnostics"></div>
+        <div class="inner"><div class="element-badge">Module 03</div><h3>Compliance Delta Diagnostics (CDD)</h3><p>Automatically diagnoses root causes of compliance failures by analysing the delta between intended legal clause and actual technical output  preventing control drift.</p><div class="more-text">When a regulator issues an amendment, the CDD automatically deconstructs the change into a structured delta report and identifies exactly where your existing workflow breaks down  no manual re-interpretation required.</div><button class="expand-btn" onclick="toggleCard(this)">Learn More</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why-section">
+  <div class="container">
+    <div class="label-tag">Why Compliance Compiler Network</div>
+    <h2 class="section-h2 dark">Built for the RegOps Era.<br>Not Just Another GRC Dashboard.</h2>
+    <div class="section-divider divider-accent"></div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon"><i class="fas fa-code"></i></div><h4>Source-to-Logic Compilation</h4><p>A first-of-its-kind framework that bridges the gap between raw legislative text and technical execution  creating a continuous feedback loop improving audit accuracy with every regulatory update.</p></div>
+      <div class="why-card"><div class="why-icon"><i class="fas fa-dna"></i></div><h4>Compliance DNA Preservation</h4><p>Captures proprietary compliance logic lost to staff turnover. When a CCO leaves, their legal-to-technical mapping stays permanently encoded as Compliance Equity inside the platform.</p></div>
+      <div class="why-card"><div class="why-icon"><i class="fas fa-shield-alt"></i></div><h4>Jurisdiction-Aware Intelligence</h4><p>Models trained on UK regulatory patterns  Online Safety Act, UK-GDPR, DORA, NIS2  ensuring hyper-localised predictive power that global platforms simply cannot replicate.</p></div>
+      <div class="why-card"><div class="why-icon"><i class="fas fa-plug"></i></div><h4>Framework-Agnostic Integration</h4><p>Built to sit above any underlying regulatory framework (GDPR, ISO, DORA, NIS2)  businesses are never locked into a single compliance standard as they expand geographically.</p></div>
+      <div class="why-card"><div class="why-icon"><i class="fas fa-network-wired"></i></div><h4>Federated Compliance Network</h4><p>The FCLN enables anonymised Compliance DNA benchmarks across UK firms  individual SMEs benefit from sector-wide intelligence without compromising sensitive data privacy.</p></div>
+      <div class="why-card"><div class="why-icon"><i class="fas fa-pound-sign"></i></div><h4>SME-Optimised Pricing</h4><p>Tiered SaaS from £80/month  giving UK fintech SMEs enterprise-grade regulatory precision without the Big Four consulting price tag or dedicated in-house legal teams.</p></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- PAGE ABOUT -->
+<div class="page" id="page-about">
+<section class="about-hero">
+  <div class="container">
+    <div class="label-tag">About Us</div>
+    <h2 class="section-h2 dark">Built by Experts Who Lived<br><span style="color:var(--accent);">Both Sides of the Compliance Gap.</span></h2>
+    <div class="section-divider divider-accent"></div>
+    <p class="para-dark" style="max-width:680px;margin-bottom:40px;">Compliance Compiler Network is a UK-based AI-driven regulatory platform founded by Sukumar Rama and Moulika Makkapati  combining 17+ years of data engineering and GRC expertise to solve the critical Interpretation Gap causing billions in non-compliance fines across UK fintech and regulated technology sectors.</p>
+    <div class="hero-btns"><button class="btn-accent" onclick="showPage('contact')">Get in Touch</button><button class="btn-secondary" onclick="showPage('platform')">Explore Platform</button></div>
+  </div>
+</section>
+
+<section class="section-light">
+  <div class="container">
+    <div class="label-tag">Vision &amp; Mission</div>
+    <h2 class="section-h2 dark">To Be the Global Standard for<br>RegOps in Regulated Enterprises.</h2>
+    <div class="section-divider divider-accent"></div>
+    <div class="vision-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:32px;">
+      <div class="why-card"><div class="why-icon"><i class="fas fa-eye"></i></div><h4>Our Vision</h4><p>We aspire to be the global standard for "RegOps"  fostering a future in which technical controls are automatically synchronised with legislative intent, ensuring continuous audit readiness and zero-gap compliance for every regulated business worldwide.</p></div>
+      <div class="why-card"><div class="why-icon"><i class="fas fa-bullseye"></i></div><h4>Our Mission</h4><p>To enable UK regulated SMEs to move from "reading law" to "executing logic" by leveraging a machine-readable compliance compiler that eliminates the interpretation gap and protects institutional regulatory memory from the high cost of talent turnover.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt">
+  <div class="container">
+    <div class="label-tag">Core Values</div>
+    <h2 class="section-h2 dark">What Drives Everything We Build</h2>
+    <div class="section-divider divider-accent"></div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon"><i class="fas fa-lightbulb"></i></div><h4>Innovation</h4><p>Continuous refinement of Source-to-Logic models to stay ahead of the global velocity of regulatory change  keeping our Compliance DNA always current.</p></div>
+      <div class="why-card"><div class="why-icon"><i class="fas fa-crosshairs"></i></div><h4>Accuracy</h4><p>A commitment to legal-technical integrity and elimination of interpretation errors  92% Quiet Failure detection accuracy proven across our R&D phases.</p></div>
+      <div class="why-card"><div class="why-icon"><i class="fas fa-lock"></i></div><h4>Sovereignty</h4><p>Empowering firms to own their operational compliance logic as a proprietary permanent business asset  not lost when compliance officers depart.</p></div>
+      <div class="why-card"><div class="why-icon"><i class="fas fa-tachometer-alt"></i></div><h4>Efficiency</h4><p>Making complex cross-border regulation manageable through machine-executable controls and low-friction API integrations with AWS, Azure, ServiceNow, and Jira.</p></div>
+      <div class="why-card"><div class="why-icon"><i class="fas fa-hands-helping"></i></div><h4>Empowerment</h4><p>Equipping founders and CCOs with automated foresight needed to scale globally without headcount-proportional compliance costs or Big Four consulting fees.</p></div>
+      <div class="why-card"><div class="why-icon"><i class="fas fa-leaf"></i></div><h4>ESG Impact</h4><p>Decrease UK SME Regulatory Compute Waste by 20–30% per firm through precise Source-to-Logic de-duplication and optimised multi-model routing  reducing carbon footprint.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-light">
+  <div class="container">
+    <div class="label-tag">Founding Team</div>
+    <h2 class="section-h2 dark">The People Behind<br>Compliance Compiler Network</h2>
+    <div class="section-divider divider-accent"></div>
+    <div class="founders-grid">
+      <div class="founder-card">
+        <div class="founder-img">SR</div>
+        <h3>Sukumar Rama</h3>
+        <div class="role">Founder &amp; CTO · Lead Data Engineer</div>
+        <p>Sukumar Rama's technical expertise forms the architectural backbone of the Compliance Compiler platform. As a Lead Data Engineer with 9+ years of experience across AWS, GCP, and Azure, he has a proven track record of architecting scalable, high-performance data solutions for global enterprises.<br><br>His specialised AI skills include fine-tuning DistilBERT for text classification and deploying scalable NLP models. At Compliance Compiler Network, Sukumar leads development of the Source-to-Logic engine and the Compliance Intermediate Representation (IR), converting complex legal schemas into machine-executable code that your technical team can actually run.</p>
+        <div class="founder-badges">
+          <span class="f-badge">9+ Years Data Engineering</span>
+          <span class="f-badge">NLP &amp; Machine Learning</span>
+          <span class="f-badge">AWS · GCP · Azure</span>
+          <span class="f-badge">DistilBERT Fine-Tuning</span>
+          <span class="f-badge">Source-to-Logic Engine</span>
+        </div>
+      </div>
+      <div class="founder-card">
+        <div class="founder-img">MM</div>
+        <h3>Moulika Makkapati</h3>
+        <div class="role">Co-Founder &amp; GRC Lead · ISO Lead Auditor</div>
+        <p>Moulika Makkapati provides the essential domain authority required to ensure the compiler's logic is audit-ready and court-defensible. With 8+ years of experience as an Information Security and GRC professional, she is a certified ISO 27001 Lead Auditor and PCI DSS Implementer.<br><br>Her certification in ISO 42001 (AI Management Systems) positions her as a leader in the emerging field of AI governance, ensuring the platform's Outcome-Learning Memory remains ethically and legally compliant. Moulika supervises the legal-to-technical taxonomy across all frameworks and manages all auditor-in-the-loop validation protocols.</p>
+        <div class="founder-badges">
+          <span class="f-badge">8+ Years GRC Experience</span>
+          <span class="f-badge">ISO 27001 Lead Auditor</span>
+          <span class="f-badge">PCI DSS Implementer</span>
+          <span class="f-badge">ISO 42001 AI Governance</span>
+          <span class="f-badge">GDPR · DORA · NIST CSF</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- PAGE PLATFORM -->
+<div class="page" id="page-platform">
+<section style="background:linear-gradient(140deg,#EAF1FF 0%,#D8E8FF 60%,#C0D4FF 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);">
+  <div class="container">
+    <div class="label-tag">Full Platform</div>
+    <h2 class="section-h2 dark">Six Intelligence Modules.<br><span style="color:var(--accent);">One Agentic Compliance Command Centre.</span></h2>
+    <div class="section-divider divider-accent"></div>
+    <p class="para-dark" style="max-width:680px;margin-bottom:40px;">Every feature is built specifically for the UK's regulated fintech and tech SME environment. Our Source-to-Logic compilation engine and Compliance IR layer translate complex legal obligations into actionable technical controls that CCOs and IT teams can actually execute on.</p>
+    <div class="hero-btns"><button class="btn-accent" onclick="showPage('contact')">Request Demo →</button><button class="btn-secondary" onclick="showPage('pricing')">View Pricing</button></div>
+  </div>
+</section>
+<section class="section-light">
+  <div class="container">
+    <div class="platform-grid" style="grid-template-columns:repeat(2,1fr);gap:28px;">
+      <div class="platform-card">
+        <div class="platform-img-wrap" style="height:220px;"><img src="comp4.jpg" alt="Regulation Intelligence"></div>
+        <div class="inner"><div class="element-badge">Module 01</div><h3>Regulation Intelligence Engine</h3><p>AI-driven parsing of UK-GDPR, OSA, DORA, NIS2, PCI DSS, ISO 27001, HIPAA into structured Compliance Intermediate Representation objects.</p><div class="more-text">Analyses 500+ pages of regulatory documentation identifying linguistic anchors  Actors, Obligations, Evidence Thresholds  stored as structured, benchmarked compliance objects ready for technical execution across your organisation.</div><button class="expand-btn" onclick="toggleCard(this)">Learn More</button></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-img-wrap" style="height:220px;"><img src="comp5.jpg" alt="Delta Diagnostics"></div>
+        <div class="inner"><div class="element-badge">Module 02</div><h3>Compliance Delta Diagnostics (CDD)</h3><p>Automatically diagnoses root causes of compliance failures  control drift, missing evidence  by analysing the delta between intended legal clause and actual technical output.</p><div class="more-text">Validated Jurisdiction-Aware Delta Compilation demonstrates a 70% reduction in manual remediation time by automatically identifying specific technical controls requiring updates following any legislative change.</div><button class="expand-btn" onclick="toggleCard(this)">Learn More</button></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-img-wrap" style="height:220px;"><img src="comp6.jpg" alt="DNA Fingerprinting"></div>
+        <div class="inner"><div class="element-badge">Module 03</div><h3>Compliance DNA Fingerprinting</h3><p>Uses machine learning to identify and fingerprint patterns of successful compliance interactions, enabling benchmarking and cloning of expert-level regulatory logic globally.</p><div class="more-text">Custom DistilBERT-based Classifier and Prompt Failure Forensics Engine (PFFE) detect Quiet Failures in compliance mapping with 92% accuracy  significantly higher than any general-purpose AI tool on the market.</div><button class="expand-btn" onclick="toggleCard(this)">Learn More</button></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-img-wrap" style="height:220px;"><img src="comp7.jpg" alt="Outcome Memory"></div>
+        <div class="inner"><div class="element-badge">Module 04</div><h3>Outcome-Learning Regulatory Memory</h3><p>Audit events transformed into Compliance Intelligence using proprietary algorithms that map successful audit passes back to original compiled control structures permanently.</p><div class="more-text">Generates comprehensive compliance health reports linking specific automated controls to financial risk reduction  giving senior leadership the same RegOps intelligence used by Tier-1 global banks.</div><button class="expand-btn" onclick="toggleCard(this)">Learn More</button></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-img-wrap" style="height:220px;"><img src="comp8.jpg" alt="Digital Twin"></div>
+        <div class="inner"><div class="element-badge">Module 05</div><h3>Compliance Digital Twin Simulation</h3><p>Virtually tests the impact of proposed regulatory changes against historical operational data to find optimal remediation path before real-world implementation.</p><div class="more-text">Simulate what a new Online Safety Act amendment would break in your current control chain before the regulator ever audits you. Risk-Weighted Compliance Evolution automatically prioritises higher-risk controls for immediate remediation.</div><button class="expand-btn" onclick="toggleCard(this)">Learn More</button></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-img-wrap" style="height:220px;"><img src="comp9.jpg" alt="Federated Network"></div>
+        <div class="inner"><div class="element-badge">Module 06</div><h3>Federated Compliance Logic Network</h3><p>Architectural federated learning enabling sharing of anonymous Compliance DNA benchmarks across UK firms  without ever revealing private organisational data.</p><div class="more-text">Trends from high-compliance financial firms in London optimise control strategies for Manchester startups. Platform scales across EU and North American jurisdictions (NIST, SEC, CCPA) through framework-agnostic architecture.</div><button class="expand-btn" onclick="toggleCard(this)">Learn More</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- PAGE PROCESS -->
+<div class="page" id="page-process">
+<section style="background:linear-gradient(140deg,#EAF1FF 0%,#D8E8FF 50%,#C0D4FF 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);">
+  <div class="container">
+    <div class="label-tag">How It Works</div>
+    <h2 class="section-h2 dark">From Manual Interpretation<br>to <span style="color:var(--accent);">Machine-Executable Compliance</span></h2>
+    <div class="section-divider divider-accent"></div>
+    <p class="para-dark" style="max-width:680px;margin-bottom:40px;">Compliance Compiler Network operates as a closed-loop regulatory intelligence lifecycle  ingesting, parsing, compiling, validating, and continuously evolving your organisation's compliance logic, so every audit is grounded in real machine-readable intelligence, not manual interpretation.</p>
+    <div class="hero-btns"><button class="btn-accent" onclick="showPage('contact')">Request a Demo →</button><button class="btn-secondary" onclick="showPage('platform')">Explore Modules</button></div>
+  </div>
+</section>
+<section class="section-light" style="padding-top:clamp(60px,8vw,96px);">
+  <div class="container">
+    <div class="label-tag">The 6-Phase Source-to-Logic Lifecycle</div>
+    <h2 class="section-h2 dark">A Complete Regulatory Compilation Loop</h2>
+    <div class="section-divider divider-accent"></div>
+
+    <div class="process-step">
+      <div><div class="step-num">Phase 01 · Ingest</div><h3 class="step-h3">Establish Your Compliance IR Baseline</h3><p class="step-p">Compliance Compiler Network ingests your relevant regulatory frameworks  UK-GDPR, Online Safety Act, DORA, NIS2, ISO 27001, PCI DSS  and builds a comprehensive Compliance Intermediate Representation (IR) schema unique to your organisation.</p><p class="step-p">The Ingest phase surfaces the hidden cost of unmanaged interpretation  giving you a precise data-driven view of your Interpretation Gap before any strategy is deployed. Linguistic anchors (Actors, Obligations, Evidence Thresholds) are mapped and stored permanently.</p></div>
+      <div class="step-vis-img-wrap"><img src="comp10.jpg" alt="Regulatory Ingest Engine  law documents being digitised into machine-readable compliance data" class="step-vis-img"></div>
+    </div>
+
+    <div class="process-step">
+      <div><div class="step-num">Phase 02 · Compile</div><h3 class="step-h3">Convert Law into Machine-Executable Logic</h3><p class="step-p">The Source-to-Logic Compilation Engine automatically deconstructs each legal paragraph into multi-step technical workflows. A single UK-GDPR clause becomes a structured chain of executable controls, evidence requests, and audit checkpoints your IT team can actually run.</p><p class="step-p">Compliance DNA Fingerprinting captures your organisation's unique legal-to-technical mapping style  new compliance hires reach audit proficiency within 14 days vs. a historical average of 45 days.</p></div>
+      <div class="step-vis-img-wrap"><img src="comp11.jpg" alt="Source-to-Logic Compiler  code converting legal text to executable compliance logic" class="step-vis-img"></div>
+    </div>
+
+    <div class="process-step">
+      <div><div class="step-num">Phase 03 · Monitor</div><h3 class="step-h3">Real-Time Compliance Delta Diagnostics</h3><p class="step-p">The CDD engine continuously monitors compiled control chains against live regulatory updates. When a new amendment is issued, the system identifies exactly which of your existing controls are impacted  in real time, not weeks later.</p><p class="step-p">Pilot deployments showed a 28% average increase in remediation speed within 8 weeks, and 18% reduction in control drift across 1,200 tested interactions.</p></div>
+      <div class="step-vis-img-wrap"><img src="comp12.jpg" alt="Delta Diagnostics Monitor  real-time compliance monitoring dashboard" class="step-vis-img"></div>
+    </div>
+
+    <div class="process-step">
+      <div><div class="step-num">Phase 04 · Validate</div><h3 class="step-h3">Auditor-in-the-Loop Governance</h3><p class="step-p">Led by Moulika Makkapati's expertise as an ISO 27001 Lead Auditor, the platform's outputs are validated against manual audit findings through the Human-in-the-Loop Governance Index  satisfying the UK's strict governance requirements for automated decision-making.</p><p class="step-p">While the compiler automates the logic, a human oversight layer remains for high-risk legal exceptions, ensuring compliance with the UK's Principles-Based AI Framework.</p></div>
+      <div class="step-vis-img-wrap"><img src="comp13.jpg" alt="Validation Gateway  auditor reviewing and approving automated compliance workflows" class="step-vis-img"></div>
+    </div>
+
+    <div class="process-step">
+      <div><div class="step-num">Phase 05 · Learn</div><h3 class="step-h3">Outcome-Learning Regulatory Memory</h3><p class="step-p">Every audit pass or failure is encoded back into the Compliance DNA Fingerprint. The platform builds a proprietary Outcome-Learning Regulatory Memory that maps successful audit interactions back to original compiled control structures.</p><p class="step-p">This turns your historical compliance success into permanent organisational Compliance Equity  an asset that survives staff turnover and protects institutional regulatory memory across generations of your compliance team.</p></div>
+      <div class="step-vis-img-wrap"><img src="comp14.jpg" alt="Outcome Learning Memory  AI system learning from audit outcomes to improve compliance intelligence" class="step-vis-img"></div>
+    </div>
+
+    <div class="process-step">
+      <div><div class="step-num">Phase 06 · Scale</div><h3 class="step-h3">Federated Benchmarking &amp; Global Expansion</h3><p class="step-p">The Federated Compliance Logic Network (FCLN) allows your organisation to benefit from anonymised Compliance DNA benchmarks across thousands of UK regulated firms  improving predictive models without sharing sensitive business data.</p><p class="step-p">Insights from high-compliance financial firms in London optimise control strategies for Manchester startups. Platform scales across EU and North American jurisdictions (NIST, SEC, CCPA) through framework-agnostic architecture.</p></div>
+      <div class="step-vis-img-wrap"><img src="comp15.jpg" alt="Federated Logic Network  global compliance benchmarking across UK and international regulated firms" class="step-vis-img"></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- PAGE MARKET -->
+<div class="page" id="page-market">
+<section style="background:linear-gradient(140deg,#EAF1FF 0%,#D8E8FF 50%,#C0D4FF 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);">
+  <div class="container">
+    <div class="label-tag">Market Analysis</div>
+    <h2 class="section-h2 dark">A $14 Billion Crisis.<br><span style="color:var(--accent);">Compliance Compiler Network Is the Solution.</span></h2>
+    <div class="section-divider divider-accent"></div>
+    <p class="para-dark" style="max-width:680px;margin-bottom:40px;">Global non-compliance fines reached $14 billion in 2024, with financial institutions facing an average annual compliance cost of over $30 million. Compliance Compiler Network targets the UK fintech and regulated tech SME segment  currently underserved by the manual, high-cost Big Four consulting model.</p>
+    <div class="hero-btns"><button class="btn-accent" onclick="showPage('contact')">Request Demo →</button><button class="btn-secondary" onclick="showPage('pricing')">View Pricing</button></div>
+  </div>
+</section>
+
+<section class="section-light">
+  <div class="container">
+    <div class="label-tag">Market Data &amp; Intelligence</div>
+    <h2 class="section-h2 dark">The Numbers Behind the RegOps Opportunity</h2>
+    <div class="section-divider divider-accent"></div>
+    <div class="charts-grid">
+      <div class="chart-card"><h4>UK RegTech Serviceable Market by Segment (£M)</h4><p>Target addressable market across UK fintech hubs and regulated industries</p><div class="chart-wrap"><canvas id="chartSector"></canvas></div></div>
+      <div class="chart-card"><h4>Key Operational Pain Points  UK Compliance Leaders</h4><p>Primary challenges driving adoption of Compliance Compiler Network</p><div class="chart-wrap"><canvas id="chartRootCause"></canvas></div></div>
+      <div class="chart-card"><h4>Compliance Compiler Network vs Competitors  Capability Radar</h4><p>Platform capabilities vs existing market alternatives</p><div class="chart-wrap"><canvas id="chartRadar"></canvas></div></div>
+      <div class="chart-card"><h4>Global GenAI in Compliance Market Growth 2022–2030</h4><p>Global market growth (USD B) + UK RegTech adoption trajectory (%)</p><div class="chart-wrap"><canvas id="chartGrowth"></canvas></div></div>
+    </div>
+    <div class="charts-grid" style="grid-template-columns:1fr;margin-top:32px;">
+      <div class="chart-card"><h4>Platform Feature Comparison  Compliance Compiler Network vs Market Average</h4><p>Capability scores across key RegOps intelligence dimensions (out of 100)</p><div class="chart-wrap"><canvas id="chartPerf"></canvas></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-blue">
+  <div class="container">
+    <div class="label-tag-white">Financial Projections</div>
+    <h2 class="section-h2 white">3-Year Revenue Trajectory</h2>
+    <div class="section-divider divider-white"></div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">£97K</div><div class="stat-lbl">Year 1 Revenue · 75 active clients · London pilots · SaaS + IR Node fees · Net Profit £11K</div></div>
+      <div class="stat-card"><div class="stat-num">£453K</div><div class="stat-lbl">Year 2 Revenue · 50–100 regulated agencies · Full UK launch · Net Profit £128K · 364% growth</div></div>
+      <div class="stat-card"><div class="stat-num">£918K</div><div class="stat-lbl">Year 3 Revenue · 200+ UK firms · Net Profit £283K · EU &amp; North America pilots · FCLN scaling</div></div>
+      <div class="stat-card"><div class="stat-num">20+</div><div class="stat-lbl">High-value UK-based AI and GRC roles created by Year 5 in technical development and compliance support</div></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- PAGE PRICING -->
+<div class="page" id="page-pricing">
+<section style="background:linear-gradient(140deg,#EAF1FF 0%,#D8E8FF 60%,#C0D4FF 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);">
+  <div class="container">
+    <div class="label-tag">Pricing &amp; Plans</div>
+    <h2 class="section-h2 dark">Enterprise RegOps Intelligence.<br><span style="color:var(--accent);">Without the Big Four Price Tag.</span></h2>
+    <div class="section-divider divider-accent"></div>
+    <p class="para-dark" style="max-width:640px;margin-bottom:0;">Tiered SaaS subscriptions designed to scale alongside your organisation's regulatory complexity  from basic obligation tracking to full-spectrum machine-executable Source-to-Logic compilation.</p>
+  </div>
+</section>
+
+<section class="pricing-section">
+  <div class="container">
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tier">Starter Plan</div>
+        <div class="pricing-price"><sup>£</sup>80<span>/month</span></div>
+        <p class="pricing-desc">For solo GRC consultants and boutique fintech startups beginning their RegOps journey.</p>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li><i class="fas fa-check"></i>Basic obligation tracking</li>
+          <li><i class="fas fa-check"></i>Compliance Graph visualisation</li>
+          <li><i class="fas fa-check"></i>1 regulatory framework (GDPR or ISO)</li>
+          <li><i class="fas fa-check"></i>Framework-agnostic mapping</li>
+          <li><i class="fas fa-check"></i>Email support</li>
+          <li style="opacity:0.4"><i class="fas fa-times"></i>Delta Compilation engine</li>
+          <li style="opacity:0.4"><i class="fas fa-times"></i>CDD diagnostics</li>
+          <li style="opacity:0.4"><i class="fas fa-times"></i>FCLN access</li>
+        </ul>
+        <button class="btn-primary" style="width:100%;justify-content:center;" onclick="showPage('contact')">Get Started →</button>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-featured-badge">Most Popular</div>
+        <div class="pricing-tier">Professional Plan</div>
+        <div class="pricing-price"><sup>£</sup>210<span>/month</span></div>
+        <p class="pricing-desc">For high-growth fintechs and data-heavy tech firms requiring full automated compliance governance.</p>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li><i class="fas fa-check"></i>Full Delta Compilation engine</li>
+          <li><i class="fas fa-check"></i>Technical Control Auto-Synthesis</li>
+          <li><i class="fas fa-check"></i>Azure/AWS UK integrations</li>
+          <li><i class="fas fa-check"></i>CDD validation module</li>
+          <li><i class="fas fa-check"></i>Up to 5 regulatory frameworks</li>
+          <li><i class="fas fa-check"></i>Compliance DNA Fingerprinting</li>
+          <li><i class="fas fa-check"></i>Priority support</li>
+          <li style="opacity:0.4"><i class="fas fa-times"></i>Secure IR Nodes / FCLN</li>
+        </ul>
+        <button class="btn-accent" style="width:100%;justify-content:center;" onclick="showPage('contact')">Get Started →</button>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-tier">Enterprise Plan</div>
+        <div class="pricing-price"><sup>£</sup>550<span>/month</span></div>
+        <p class="pricing-desc">For multi-jurisdictional financial groups and Managed Service Providers requiring full RegOps sovereignty.</p>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li><i class="fas fa-check"></i>Source-to-Logic Compiler (full)</li>
+          <li><i class="fas fa-check"></i>Secure Compliance IR Nodes</li>
+          <li><i class="fas fa-check"></i>FCLN network access</li>
+          <li><i class="fas fa-check"></i>Unlimited regulatory frameworks</li>
+          <li><i class="fas fa-check"></i>Dedicated GRC Success Manager</li>
+          <li><i class="fas fa-check"></i>Outcome-Learning Memory module</li>
+          <li><i class="fas fa-check"></i>Custom API integrations</li>
+          <li><i class="fas fa-check"></i>Digital Twin Simulation</li>
+        </ul>
+        <button class="btn-primary" style="width:100%;justify-content:center;" onclick="showPage('contact')">Get Started →</button>
+      </div>
+    </div>
+
+    <div style="margin-top:60px;">
+      <div class="label-tag">Add-On Services</div>
+      <h2 class="section-h2 dark">Professional Services &amp; Modules</h2>
+      <div class="section-divider divider-accent"></div>
+      <div class="addon-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:36px;">
+        <div class="why-card"><div class="why-icon"><i class="fas fa-server"></i></div><h4>Secure Compliance IR Nodes</h4><p>Leasing of on-premise Compliance IR nodes for high-security environments. <strong style="color:var(--blue);">£650 setup fee</strong> per unit for initial configuration.</p></div>
+        <div class="why-card"><div class="why-icon"><i class="fas fa-clipboard-check"></i></div><h4>Design Validation Audit</h4><p>Expert-led compliance architecture review and validation against UK regulatory requirements. <strong style="color:var(--blue);">£510–£600</strong> based on deployment complexity.</p></div>
+        <div class="why-card"><div class="why-icon"><i class="fas fa-chart-bar"></i></div><h4>Premium Regulatory Reports</h4><p>Advanced benchmarking and Compliance Equity growth insights with sector comparisons. <strong style="color:var(--blue);">£200–£500/year</strong> per firm.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- PAGE FAQ -->
+<div class="page" id="page-faq">
+<section style="background:linear-gradient(140deg,#EAF1FF 0%,#D8E8FF 50%,#C0D4FF 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);">
+  <div class="container">
+    <div class="label-tag">Frequently Asked Questions</div>
+    <h2 class="section-h2 dark">Everything You Need to Know<br>About <span style="color:var(--accent);">Compliance Compiler Network</span></h2>
+    <div class="section-divider divider-accent"></div>
+  </div>
+</section>
+<section class="faq-section">
+  <div class="container">
+    <div class="faq-grid">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)"><span>What is the "Interpretation Gap" and why does it matter?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a">The Interpretation Gap is the disconnect between raw legal regulatory text and the actual technical controls an organisation implements. Currently, compliance is dominated by manual human interpretation  legal counsel must painstakingly read dense, fragmented texts. In 2024 alone, this gap caused $14 billion in global non-compliance fines. Compliance Compiler Network eliminates this by converting law directly into machine-executable logic  the world's first Source-to-Logic compilation platform.</div></div>
+
+      <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)"><span>How is Compliance Compiler Network different from GRC tools like OneTrust or Vanta?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a">Traditional GRC tools like OneTrust are static repositories  "digital filing cabinets"  that store policies but rely entirely on manual human interpretation to map legal text to controls. Vanta provides automated evidence collection for pre-defined frameworks like SOC2, but cannot "compile" new or custom legal text. Compliance Compiler Network is the only platform with a Source-to-Logic compilation engine  turning raw regulatory text into machine-executable compliance logic automatically, with a 92% Quiet Failure detection accuracy proven in R&D.</div></div>
+
+      <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)"><span>What is Compliance DNA and why should I protect it?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a">Compliance DNA is the proprietary legal-to-technical mapping logic built up by your compliance team over years of audits, regulatory interactions, and framework management. When a Chief Compliance Officer or senior GRC professional leaves, this knowledge walks out the door  creating "Interpretation Loss." Compliance Compiler Network captures and encodes this logic permanently into the platform, so the organisation owns it as Compliance Equity regardless of staff turnover. Pilot firms found new junior compliance analysts performing at specialist level within just one week.</div></div>
+
+      <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)"><span>Which regulatory frameworks does the platform support?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a">Compliance Compiler Network supports UK-GDPR, Online Safety Act (OSA), DORA, NIS2, ISO 27001, SOC 2, PCI DSS, HIPAA, NIST CSF, and the UK Principles-Based AI Framework. The platform is framework-agnostic by design  built to sit above any underlying regulatory framework, ensuring businesses aren't locked into a single compliance standard as they expand geographically into EU and North American markets (NIST, SEC, CCPA).</div></div>
+
+      <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)"><span>How quickly can we get started and see results?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a">Pilot deployments have shown that participating firms see a 28% average increase in remediation speed within the first 8 weeks. New compliance hires reach audit proficiency within 14 days of system activation (vs. a historical average of 45 days). Cloud and GRC stack integrations (AWS/Azure, ServiceNow, Jira) reduce the standard onboarding timeline from weeks to hours through our public API layer.</div></div>
+
+      <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)"><span>Is the platform compliant with UK data privacy requirements?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a">Yes. The platform is fully compliant with the UK's Principles-Based AI Framework (DSIT) and ICO guidance on AI and Data Protection (UK GDPR). Secure on-premise Compliance IR Nodes ensure sensitive organisational logic is captured without compromising data privacy standards. The Federated Compliance Logic Network (FCLN) uses fully anonymised benchmarking data  no individual firm's sensitive compliance logic is ever shared with any other organisation.</div></div>
+
+      <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)"><span>What does "Compliance Equity" mean for my business?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a">Compliance Equity is the concept of converting transient employee legal expertise into permanent organisational knowledge assets. Instead of compliance being a variable cost that fluctuates with staff turnover, it becomes a fixed, growing asset. Compliance Compiler Network calculates your specific Compliance Equity score in real time, showing senior leadership exactly how compiled regulatory logic reduces risk-to-output ratios and contributes to long-term institutional resilience  aligning with the UK's 2025 Smart Data and Digital Growth goals.</div></div>
+
+      <div class="faq-item"><div class="faq-q" onclick="toggleFAQ(this)"><span>Can the platform handle overlapping and conflicting regulatory frameworks?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a">Yes  this is one of our core innovations. The Jurisdiction-Aware Delta Compilation engine specifically handles "regulatory collision" scenarios where a single business process is subject to three or four overlapping legal frameworks (e.g., DORA and UK Operational Resilience rules simultaneously). The system fingerprints overlapping requirements, enabling your firm to implement a single technical control that satisfies multiple jurisdictions simultaneously  eliminating the redundancy loss that occurs in manual mapping.</div></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- PAGE CONTACT -->
+<div class="page" id="page-contact">
+
+<section style="background:linear-gradient(140deg,#EAF1FF 0%,#D8E8FF 50%,#C0D4FF 100%);padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,80px);">
+  <div class="container">
+    <div class="label-tag">Contact &amp; Demo</div>
+
+    <h2 class="section-h2 dark">
+      Ready to Compile Your<br>
+      <span style="color:var(--accent);">Compliance Intelligence?</span>
+    </h2>
+
+    <div class="section-divider divider-accent"></div>
+
+    <p class="para-dark" style="max-width:640px;">
+      Book a demo with Sukumar and Moulika to see the Source-to-Logic engine in action
+      using your own regulatory frameworks and existing compliance stack.
+      No obligation, no jargon.
+    </p>
+  </div>
+</section>
+
+<section class="contact-section">
+  <div class="container">
+
+    <div class="contact-grid">
+
+      <!-- CONTACT FORM -->
+      <div class="contact-form-card">
+
+        <h3 style="font-family:var(--display);font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:24px;">
+          Request a Demo
+        </h3>
+
+        <!-- WEB3FORMS -->
+        <form action="https://api.web3forms.com/submit" method="POST">
+
+          <input type="hidden" name="access_key" value="5789928f-1ed4-4ca2-8ecf-4a3a002b57db">
+
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="name" placeholder="Your name" required>
+          </div>
+
+          <div class="form-group">
+            <label>Business Email</label>
+            <input type="email" name="email" placeholder="you@company.com" required>
+          </div>
+
+          <div class="form-group">
+            <label>Company</label>
+            <input type="text" name="company" placeholder="Your company name">
+          </div>
+
+          <div class="form-group">
+            <label>Regulatory Frameworks</label>
+
+            <select name="framework">
+              <option>UK-GDPR / Online Safety Act</option>
+              <option>ISO 27001 / SOC 2</option>
+              <option>DORA / NIS2</option>
+              <option>PCI DSS / HIPAA</option>
+              <option>Multiple / All of the above</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Message</label>
+
+            <textarea 
+              name="message"
+              placeholder="Tell us about your compliance challenges and current stack..."
+              required>
+            </textarea>
+          </div>
+
+          <button type="submit" class="btn-accent" style="width:100%;justify-content:center;padding:15px;">
+            Send Demo Request →
+          </button>
+
+        </form>
+      </div>
+
+      <!-- CONTACT DETAILS -->
+      <div>
+
+        <h3 style="font-family:var(--display);font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:24px;">
+          Contact the Founders
+        </h3>
+
+        <div class="contact-detail">
+          <div class="icon">
+            <i class="fas fa-user-tie"></i>
+          </div>
+
+          <div class="text">
+            <strong>Sukumar Rama · CTO &amp; Founder</strong>
+            <span>
+              Lead Data Engineer · NLP &amp; Machine Learning · Source-to-Logic Engine
+            </span>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="icon">
+            <i class="fas fa-user-shield"></i>
+          </div>
+
+          <div class="text">
+            <strong>Moulika Makkapati · GRC Lead &amp; Co-Founder</strong>
+            <span>
+              ISO 27001 Lead Auditor · PCI DSS Implementer · AI Governance Pioneer
+            </span>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+
+          <div class="text">
+            <strong>Based in the UK</strong>
+            <span>
+              London &amp; Manchester · Serving UK FinTech &amp; Regulated Tech SMEs
+            </span>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+
+          <div class="text">
+            <strong>compliancecompilernetwork@outlook.com</strong>
+            <span>
+              Response within 1 business day
+            </span>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="icon">
+            <i class="fas fa-clock"></i>
+          </div>
+
+          <div class="text">
+            <strong>Demo Sessions Available</strong>
+            <span>
+              Monday–Friday · 9am–6pm GMT · 45-minute deep-dive sessions
+            </span>
+          </div>
+        </div>
+
+        <!-- PILOT PROGRAM -->
+        <div style="margin-top:32px;background:linear-gradient(135deg,rgba(11,45,94,0.05),rgba(0,196,180,0.08));border:1px solid rgba(0,196,180,0.2);border-radius:16px;padding:24px;">
+
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">
+            PILOT PROGRAMME
+          </div>
+
+          <h4 style="font-family:var(--display);font-size:18px;font-weight:700;color:var(--text-dark);margin-bottom:10px;">
+            Join Our Phase 1 Pilot
+          </h4>
+
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.7;">
+            We are recruiting 8–12 London and Manchester-based Fintech and
+            Data-infrastructure firms for our 8-week pilot programme.
+            Participants gain early access, dedicated founder support,
+            and heavily discounted pricing.
+          </p>
+
+          <button class="btn-accent" style="margin-top:16px;">
+            Apply for Pilot →
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</div>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        Compliance Compiler Network
+      </div>
+
+      <p>
+        AI-powered regulatory compilation platform for UK fintech and regulated technology SMEs.
+        Read Law. Execute Code. Compile Trust.
+      </p>
+
+      <div class="footer-badges">
+        <span class="footer-badge">UK GDPR Compliant</span>
+        <span class="footer-badge">ISO 27001 Ready</span>
+        <span class="footer-badge">UK AI Framework Aligned</span>
+        <span class="footer-badge">SOC 2 Coverage</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Platform</div>
+      <div class="footer-col">
+        <a onclick="showPage('platform')">Regulation Intelligence Engine</a>
+        <a onclick="showPage('platform')">Clause-to-Control Auto-Synthesis</a>
+        <a onclick="showPage('platform')">Compliance Delta Diagnostics</a>
+        <a onclick="showPage('platform')">DNA Fingerprinting</a>
+        <a onclick="showPage('platform')">Outcome-Learning Memory</a>
+        <a onclick="showPage('platform')">Federated Logic Network (FCLN)</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Company</div>
+      <div class="footer-col">
+        <a onclick="showPage('about')">About Us</a>
+        <a onclick="showPage('about')">Sukumar Rama · CTO</a>
+        <a onclick="showPage('about')">Moulika Makkapati · GRC Lead</a>
+        <a onclick="showPage('process')">How It Works</a>
+        <a onclick="showPage('faq')">FAQ</a>
+        <a onclick="showPage('market')">Market Analysis</a>
+        <a onclick="showPage('contact')">Request a Demo</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Solutions</div>
+      <div class="footer-col">
+        <a onclick="showPage('platform')">Independent Fintech Firms</a>
+        <a onclick="showPage('platform')">Boutique GRC Consulting Teams</a>
+        <a onclick="showPage('platform')">Data-Heavy Infrastructure</a>
+        <a onclick="showPage('platform')">Multi-Jurisdictional Groups</a>
+        <a onclick="showPage('pricing')">Starter · £80/mo</a>
+        <a onclick="showPage('pricing')">Professional · £210/mo</a>
+        <a onclick="showPage('pricing')">Enterprise · £550/mo</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom-bar">
+    <p>
+      © 2026 <span>Compliance Compiler Network</span> · London &amp; Manchester, UK ·
+      Founded by Sukumar Rama &amp; Moulika Makkapati
+    </p>
+
+    <div class="footer-bottom-links">
+      <a onclick="showPage('contact')">Privacy Policy</a>
+      <a onclick="showPage('contact')">Terms of Service</a>
+      <a onclick="showPage('contact')">Business Plan · Confidential</a>
+    </div>
+  </div>
+</footer>
+<!-- JAVASCRIPT -->
+<script>
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links button').forEach(b=>b.classList.remove('active'));
+  const pg=document.getElementById('page-'+name);
+  if(pg)pg.classList.add('active');
+  const btn=document.getElementById('nav-'+name);
+  if(btn)btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+  if(name==='market'&&!window.chartsLoaded){initCharts();window.chartsLoaded=true;}
+}
+function toggleCard(btn){
+  const c=btn.closest('.platform-card');
+  c.classList.toggle('open');
+  btn.textContent=c.classList.contains('open')?'Show Less':'Learn More';
+}
+function toggleFAQ(el){el.parentElement.classList.toggle('open');}
+function closeMobile(){
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+document.getElementById('hamburger').addEventListener('click',function(){
+  this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open');
+});
+
+const BLU='rgba(11,45,94,0.85)';
+const BLU2='rgba(11,45,94,0.55)';
+const BLU3='rgba(11,45,94,0.3)';
+const ACC='rgba(0,196,180,0.9)';
+const ACC2='rgba(0,196,180,0.5)';
+const GRID='rgba(11,45,94,0.07)';
+const MUTED='rgba(26,58,106,0.8)';
+Chart.defaults.font.family="'IBM Plex Mono',monospace";
+Chart.defaults.font.size=11;
+Chart.defaults.color=MUTED;
+
+function initCharts(){
+  new Chart(document.getElementById('chartSector').getContext('2d'),{
+    type:'bar',
+    data:{labels:['Independent FinTech SME','Regulated Tech Mid-Market','Data Infrastructure','GRC Consulting','Multi-Jurisdiction'],datasets:[{label:'SAM (£M)',data:[180,140,95,75,60],backgroundColor:[BLU,BLU2,BLU3,ACC,ACC2],borderRadius:6,barPercentage:0.6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:MUTED}},y:{grid:{color:GRID},ticks:{color:MUTED,callback:v=>'£'+v+'M'}}}}
+  });
+  new Chart(document.getElementById('chartRootCause').getContext('2d'),{
+    type:'doughnut',
+    data:{labels:['Interpretation Gap (72%)','Manual Bottleneck (81%)','No Machine Logic (96%)','Compliance DNA Lost (68%)','No Delta Compilation (88%)'],datasets:[{data:[72,81,96,68,88],backgroundColor:[BLU,BLU2,BLU3,ACC,ACC2],borderColor:['rgba(11,45,94,0.9)','rgba(11,45,94,0.65)','rgba(11,45,94,0.35)','rgba(0,196,180,0.9)','rgba(0,196,180,0.55)'],borderWidth:1.5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:MUTED,boxWidth:10,padding:10,font:{size:10}}}}}
+  });
+  new Chart(document.getElementById('chartRadar').getContext('2d'),{
+    type:'radar',
+    data:{
+      labels:['Source-to-Logic','Delta Diagnostics','UK Jurisdiction','Compliance DNA','Federated Network','Outcome Memory'],
+      datasets:[
+        {label:'Compliance Compiler Network',data:[5,5,5,5,5,5],backgroundColor:'rgba(0,196,180,0.1)',borderColor:ACC,borderWidth:2,pointBackgroundColor:ACC},
+        {label:'OneTrust',data:[1,1,2,2,1,1],backgroundColor:'rgba(11,45,94,0.04)',borderColor:BLU2,borderWidth:1.5,pointBackgroundColor:BLU2},
+        {label:'Vanta',data:[2,1,2,2,1,1],backgroundColor:'rgba(11,45,94,0.03)',borderColor:BLU3,borderWidth:1.5,pointBackgroundColor:BLU3},
+        {label:'Raw AI',data:[3,1,2,1,1,2],backgroundColor:'rgba(0,196,180,0.04)',borderColor:ACC2,borderWidth:1.5,pointBackgroundColor:ACC2}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:MUTED,boxWidth:10,padding:12,font:{size:10}}}},scales:{r:{backgroundColor:'rgba(11,45,94,0.01)',grid:{color:GRID},pointLabels:{color:MUTED,font:{size:10}},ticks:{display:false},min:0,max:5}}}
+  });
+  new Chart(document.getElementById('chartGrowth').getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:['2022','2023','2024','2025','2026','2027','2028','2030'],
+      datasets:[
+        {label:'Global GenAI Compliance (USD B)',data:[40,68,184,245,320,430,580,900],backgroundColor:BLU2,borderRadius:5,barPercentage:0.55},
+        {type:'line',label:'UK RegTech Adoption %',data:[null,3,8,14,22,35,50,70],borderColor:ACC,borderWidth:2,yAxisID:'y2',tension:0.4,pointBackgroundColor:ACC,fill:false}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:MUTED,boxWidth:10,padding:12,font:{size:10}}}},scales:{x:{grid:{color:GRID},ticks:{color:MUTED}},y:{grid:{color:GRID},ticks:{color:MUTED,callback:v=>'$'+v+'B'}},y2:{position:'right',grid:{display:false},ticks:{color:MUTED,callback:v=>v+'%'}}}}
+  });
+  new Chart(document.getElementById('chartPerf').getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:['Source-to-Logic Compilation','Delta Diagnostics','Compliance DNA Mapping','UK Jurisdiction Training','Federated Benchmarking','Outcome-Learning Memory'],
+      datasets:[
+        {label:'Compliance Compiler Network',data:[97,95,96,99,92,94],backgroundColor:BLU2,borderRadius:5,barPercentage:0.35},
+        {label:'Legacy Market Average',data:[3,2,4,5,1,2],backgroundColor:ACC2,borderRadius:5,barPercentage:0.35}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:MUTED,boxWidth:10,padding:14,font:{size:10}}}},scales:{x:{grid:{color:GRID},ticks:{color:MUTED,font:{size:9}}},y:{grid:{color:GRID},ticks:{color:MUTED,callback:v=>v+' pts'}}}}
+  });
+}
+</script>
+</body>
+</html>
